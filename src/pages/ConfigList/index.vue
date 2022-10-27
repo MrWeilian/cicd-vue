@@ -8,9 +8,12 @@
       <el-form-item label="项目名称">
         <el-input v-model="searchParams.projectName" placeholder="输入项目名搜索"></el-input>
       </el-form-item>
+      <el-form-item>
+        <el-button @click="onSearch">搜索</el-button>
+      </el-form-item>
     </el-form>
 
-    <el-table>
+    <el-table :data="tableData">
       <el-table-column label="项目名称" prop="projectName" />
       <el-table-column label="仓库地址" prop="gitUrl" />
       <el-table-column label="构建分支" prop="gitBranch" />
@@ -36,8 +39,10 @@ import useConfigList from './useConfigList';
 
 const {
   searchParams,
+  tableData,
   handleSizeChange,
-  handleCurrentChange
+  handleCurrentChange,
+  onSearch
 } = useConfigList()
 </script>
 

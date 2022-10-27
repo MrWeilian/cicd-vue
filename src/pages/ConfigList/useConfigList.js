@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {getConfig} from './api';
 
 export default function useConfigList () {
@@ -9,13 +9,21 @@ export default function useConfigList () {
     total: 0
   })
 
+  const tableData = ref([])
+
   const initData = async () => {
     const res = await getConfig(searchParams)
+    tableData.value = res.list
+    searchParams.total = res.total
   }
 
   const handleSizeChange = () => {}
 
   const handleCurrentChange = () => {}
+
+  const onSearch = () => {
+    initData()
+  }
 
   onMounted(() => {
     initData()
@@ -23,7 +31,9 @@ export default function useConfigList () {
 
   return {
     searchParams,
+    tableData,
     handleSizeChange,
-    handleCurrentChange
+    handleCurrentChange,
+    onSearch
   }
 }
