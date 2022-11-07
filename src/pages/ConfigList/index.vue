@@ -15,7 +15,11 @@
     </el-form>
 
     <el-table :data="tableData">
-      <el-table-column label="项目名称" prop="projectName" />
+      <el-table-column label="项目名称" prop="projectName">
+        <template #default="scope">
+          <el-button type="primary" link @click="handleToDetail(scope.row)">{{ scope.row.projectName }}</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="仓库地址" prop="gitUrl" />
       <el-table-column label="构建分支" prop="gitBranch" />
       <el-table-column label="shell 命令" prop="buildCommand" />
@@ -91,7 +95,8 @@ const {
   onAdd,
   onSubmit,
   onEdit,
-  onDel
+  onDel,
+  handleToDetail
 } = useConfigList()
 </script>
 

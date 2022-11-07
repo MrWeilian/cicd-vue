@@ -12,6 +12,11 @@ const router = createRouter({
       }
     },
     {
+      path: '/configDetail/:id',
+      component: () => import('@/pages/ConfigDetail/index.vue'),
+      name: 'ConfigDetail'
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/ConfigList'
     }

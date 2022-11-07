@@ -1,8 +1,11 @@
 import {computed, onMounted, reactive, ref} from 'vue';
 import {getConfig, postDelete, postSave, postUpdate} from './api';
 import {ElMessage} from 'element-plus';
+import { useRouter } from 'vue-router';
 
 export default function useConfigList () {
+  const router = useRouter()
+
   const searchParams = reactive({
     projectName: '',
     pageNo: 1,
@@ -79,6 +82,15 @@ export default function useConfigList () {
     }
   }
 
+  const handleToDetail = (rowData) => {
+    router.push({
+      name:"ConfigDetail",
+      params:{
+        id: rowData._id
+      }}
+    )
+  }
+
   const dialogTitle = computed(() => isEdit.value ? '编辑配置信息' : '新增配置信息')
 
   onMounted(() => {
@@ -98,6 +110,7 @@ export default function useConfigList () {
     onAdd,
     onSubmit,
     onEdit,
-    onDel
+    onDel,
+    handleToDetail
   }
 }
