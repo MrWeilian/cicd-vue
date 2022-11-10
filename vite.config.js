@@ -17,6 +17,10 @@ export default defineConfig({
         rewrite: path => {
           return path.replace(/^\/api/, '')
         }
+      },
+      '/jenkins': {
+        target: 'http://localhost:3200',
+        changeOrigin: true
       }
     }
   }

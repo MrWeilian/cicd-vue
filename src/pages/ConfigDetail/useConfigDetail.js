@@ -1,6 +1,7 @@
 import {onMounted, reactive} from 'vue';
 import {getConfigDetail} from './api';
 import { useRoute } from 'vue-router';
+import { io } from 'socket.io-client'
 
 export function useConfigDetail () {
   const route = useRoute()
@@ -15,7 +16,6 @@ export function useConfigDetail () {
   })
 
   const initDetail = async () => {
-    console.log(route);
     const { id } = route.params
     try {
       const res = await getConfigDetail({ id })
@@ -27,8 +27,22 @@ export function useConfigDetail () {
     }
   }
 
-  onMounted(() => {
-    initDetail()
+  const initSocket = () => {
+    const { id } = route.params
+    const ioInstance = io( {
+      path: '/jenkins/build',
+      query: {
+        id
+      }
+    })
+
+    ioInstance.on('', function () {})
+  }
+
+  onMounted(async () => {
+    await initDetail()
+
+    initSocket()
   })
 
   return {
