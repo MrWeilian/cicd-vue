@@ -39,10 +39,12 @@ export function useConfigDetail () {
         id
       }
     })
+    initLogStream()
   }
 
   const initLogStream = () => {
     ioInstance.value.on('build:data', function (data) {
+      console.log('接数据', data);
       stream.value = data
     })
     ioInstance.value.on('build:error', function (err) {})
