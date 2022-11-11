@@ -23,13 +23,13 @@
     </el-form>
     <el-divider>操作区域</el-divider>
     <section >
-      <el-button type="primary">开始构建</el-button>
+      <el-button type="primary" @click="handleBuild">开始构建</el-button>
       <el-button type="primary">构建历史</el-button>
       <el-button type="warning">回滚</el-button>
     </section>
     <el-divider>构建日志</el-divider>
     <el-card class="box-card min-h-[320px]">
-
+      <pre>{{ stream }}</pre>
     </el-card>
   </el-card>
 </template>
@@ -38,7 +38,9 @@
 import {useConfigDetail} from './useConfigDetail';
 
 const {
-  detailData
+  detailData,
+  stream,
+  handleBuild
 } = useConfigDetail()
 </script>
 

@@ -1,4 +1,4 @@
-import {onMounted, reactive} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {getConfigDetail} from './api';
 import { useRoute } from 'vue-router';
 import { io } from 'socket.io-client'
@@ -15,6 +15,10 @@ export function useConfigDetail () {
     uploadPath: ''
   })
 
+  const ioInstance = ref()
+
+  const stream = ref('')
+
   const initDetail = async () => {
     const { id } = route.params
     try {
@@ -29,14 +33,26 @@ export function useConfigDetail () {
 
   const initSocket = () => {
     const { id } = route.params
-    const ioInstance = io( {
+    ioInstance.value = io( {
       path: '/jenkins/build',
       query: {
         id
       }
     })
+  }
 
-    ioInstance.on('', function () {})
+  const initLogStream = () => {
+    ioInstance.value.on('build:data', function (data) {
+      stream.value = data
+    })
+    ioInstance.value.on('build:error', function (err) {})
+    ioInstance.value.on('build:end', function () {})
+  }
+
+  const handleBuild = () => {
+    ioInstance.value.emit('build:start')
+
+    initLogStream()
   }
 
   onMounted(async () => {
@@ -46,6 +62,8 @@ export function useConfigDetail () {
   })
 
   return {
-    detailData
+    detailData,
+    stream,
+    handleBuild
   }
 }
