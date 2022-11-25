@@ -23,9 +23,12 @@
     </el-form>
     <el-divider>操作区域</el-divider>
     <section >
-      <el-button type="primary" @click="handleBuild">开始构建</el-button>
+      <el-button type="primary" @click="handleBuild">{{ isRollBack ? '开始回滚' : '开始构建'}}</el-button>
       <el-button type="primary">构建历史</el-button>
-      <el-button type="warning">回滚</el-button>
+      <el-button type="warning" @click="handleRollBack">{{ isRollBack ? '取消回滚' : '版本回滚' }}</el-button>
+      <el-select class="ml-[8px]" placeholder="选择回滚版本" v-model="rollBackHash" v-if="isRollBack">
+        <el-option v-for="item in historyList" :label="item.label" :value="item.value" />
+      </el-select>
     </section>
     <el-divider>构建日志</el-divider>
     <el-card class="box-card min-h-[320px]">
@@ -40,7 +43,11 @@ import {useConfigDetail} from './useConfigDetail';
 const {
   detailData,
   stream,
-  handleBuild
+  isRollBack,
+  historyList,
+  rollBackHash,
+  handleBuild,
+  handleRollBack
 } = useConfigDetail()
 </script>
 

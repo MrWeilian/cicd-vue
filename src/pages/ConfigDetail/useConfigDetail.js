@@ -1,5 +1,5 @@
 import {onMounted, reactive, ref} from 'vue';
-import {getConfigDetail} from './api';
+import {getConfigDetail, getHistory} from './api';
 import { useRoute } from 'vue-router';
 import { io } from 'socket.io-client'
 
@@ -17,6 +17,12 @@ export function useConfigDetail () {
 
   const ioInstance = ref()
 
+  const isRollBack = ref(false)
+
+  const historyList = ref([])
+
+  const rollBackHash = ref('')
+
   const stream = ref('')
 
   const initDetail = async () => {
@@ -26,6 +32,8 @@ export function useConfigDetail () {
       Object.keys(detailData).forEach(key => {
         detailData[key] = res[key]
       })
+
+      historyList.value = res.history.map(_ => ({ label: _.title, commitHash: _.commitHash }))
     } catch (e) {
 
     }
@@ -57,6 +65,8 @@ export function useConfigDetail () {
     initLogStream()
   }
 
+  const handleRollBack = () => isRollBack.value = !isRollBack.value
+
   onMounted(async () => {
     await initDetail()
 
@@ -66,6 +76,10 @@ export function useConfigDetail () {
   return {
     detailData,
     stream,
-    handleBuild
+    isRollBack,
+    historyList,
+    rollBackHash,
+    handleBuild,
+    handleRollBack
   }
 }
